@@ -1,3 +1,4 @@
+@import "fa/font-awesome.scss";
 .eqftp {
     &__toolbar {
         &__icon {
@@ -5,6 +6,78 @@
             background-size: contain;
             &.disabled {
                 opacity: 0.2;
+            }
+        }
+    }
+    &__panel {
+        &__toolbar {
+            &__icon {
+                display: inline-block;
+                padding: 6px 7px;;
+                border-radius: 20px;
+                vertical-align: middle;
+                margin-right: 10px;
+                line-height: 10px;
+                &:hover {
+                    background-color: #f0f0f0;
+                }
+            }
+        }
+    }
+}
+#eqftp {
+    &__panel {
+        position: absolute;
+        height: 100%;
+        min-width: 100px;
+        z-index: 10;
+        background-color: #e3e3e3;
+        &__toolbar {
+            height: 30px;
+            width: 100%;
+            line-height: 30px;
+            background-color: #f8f8f8;
+            color: #000000;
+        }
+        &__server-list {
+            vertical-align: middle;
+            display: inline-block;
+            margin: -2px 0 0 0;
+            background-color: #171717;
+        }
+    }
+}
+
+.dark {
+    #eqftp {
+        &__panel {
+            background-color: #1a1a1a;
+            &__toolbar {
+                background-color: #1d1f21;
+                color: #ffffff;
+                &__icon {
+                    &:hover {
+                        background-color: #1a1c1d;
+                    }
+                }
+            }
+            &__server-list {
+                background-color: #171717;
+            }
+        }
+    }
+    .eqftp {
+        &__toolbar {
+            &__icon {
+            }
+        }
+        &__panel {
+            &__toolbar {
+                &__icon {
+                    &:hover {
+                        background-color: #1a1c1d;
+                    }
+                }
             }
         }
     }
