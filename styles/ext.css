@@ -1,0 +1,7 @@
+.eqftp__toolbar__icon {
+  background-image: url(img/toolbar__icon.svg);
+  background-size: contain; }
+  .eqftp__toolbar__icon.disabled {
+    opacity: 0.2; }
+
+/*# sourceMappingURL=ext.css.map */

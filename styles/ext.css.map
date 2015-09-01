@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAEQ,qBAAQ;EACJ,gBAAgB,EAAE,0BAA0B;EAC5C,eAAe,EAAE,OAAO;EACxB,8BAAW;IACP,OAAO,EAAE,GAAG",
+"sources": ["ext.scss"],
+"names": [],
+"file": "ext.css"
+}

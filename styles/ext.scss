@@ -1,0 +1,11 @@
+.eqftp {
+    &__toolbar {
+        &__icon {
+            background-image: url(img/toolbar__icon.svg);
+            background-size: contain;
+            &.disabled {
+                opacity: 0.2;
+            }
+        }
+    }
+}

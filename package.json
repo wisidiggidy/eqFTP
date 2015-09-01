@@ -1,0 +1,22 @@
+{
+	"name": "equals182.eqftp-new",
+	"title": "eqFTP-new",
+	"version": "0.8.0",
+	"description": "FTP/SFTP client for Brackets. Please restart Brackets manually after update.",
+	"homepage": "http://equals182.github.io/eqFTP/",
+	"author": "Alexander <equals182@gmail.com>",
+	"license": "MIT",
+	"categories": ["livedev","external"],
+	"keywords": ["FTP", "SFTP"],
+	"engines": {
+		"brackets": ">=1.4.0"
+	},
+    "i18n": [
+        "en"
+    ],
+    "package-i18n": {
+        "en": {
+            "description": "FTP/SFTP client for Brackets. Please restart Brackets manually after update."
+        }
+    }
+}
