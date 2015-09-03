@@ -2,3 +2,4 @@
    readers do not read off random characters that represent icons */
 
 .#{$fa-css-prefix}-bars:before { content: $fa-var-bars; }
+.#{$fa-css-prefix}-cog:before { content: $fa-var-cog; }

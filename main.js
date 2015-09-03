@@ -64,8 +64,13 @@ define(function (require, exports, module) {
                 },
                 panel: {
                     toolbar: {
-                        dropdown: function (params) {
-                            console.log(params);
+                        dropdown: function (params, e) {
+                            $(params.id).toggle();
+                        }
+                    },
+                    settings_window: {
+                        toggle: function () {
+                            $('#eqftp__panel__settings_window').toggleClass('active');
                         }
                     }
                 }
@@ -115,12 +120,18 @@ define(function (require, exports, module) {
                 if (eqftp.utils.check.isObject(tmp[o])) {
                     tmp = tmp[o];
                 } else if (eqftp.utils.check.isFunction(tmp[o])) {
-                    tmp[o](args);
+                    tmp[o](args, e);
                     return true;
                 } else {
                     return true;
                 }
             });
+        });
+        $('body').on('click', function (e) {
+            var t = e.target;
+            if (!$(t).is('.eqftp__dropdown-holder') && $(t).closest('.eqftp__dropdown-holder').length === 0) {
+                $('.eqftp__dropdown').hide();
+            }
         });
     });
     

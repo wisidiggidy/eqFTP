@@ -6,8 +6,23 @@
             </select>
         </div>
         <div class="pull-right">
-            <i class="eqftp__panel__toolbar__icon" eqftp-click="ui__panel__toolbar__dropdown--id=eqftp__panel__toolbar_dropdown_1"><i class="fa fa-bars"></i></i>
+            <div class="eqftp__panel__toolbar__icon eqftp__dropdown-holder" eqftp-click="ui__panel__toolbar__dropdown--id=#eqftp__panel__toolbar_dropdown_1">
+                <i class="fa fa-bars"></i>
+                <div id="eqftp__panel__toolbar_dropdown_1" class="eqftp__dropdown">
+                    <ul>
+                        <li eqftp-click="ui__panel__settings_window__toggle"><i class="fa fa-cog"></i>{{eqftp__panel__dropdown_1__settings}}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div id="eqftp__panel__content"></div>
+    <div id="eqftp__panel__settings_window">
+        <ul>
+            <li>
+                <div class="eqftp__panel__settings_window__title">{{eqftp__panel__settings_window__general_settings}}</div>
+                
+            </li>
+        </ul>
+    </div>
 </div>

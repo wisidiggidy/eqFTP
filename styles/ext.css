@@ -172,6 +172,9 @@
 .fa-bars:before {
   content: ""; }
 
+.fa-cog:before {
+  content: ""; }
+
 .eqftp__toolbar__icon {
   background-image: url(img/toolbar__icon.svg);
   background-size: contain; }
@@ -183,9 +186,33 @@
   border-radius: 20px;
   vertical-align: middle;
   margin-right: 10px;
-  line-height: 10px; }
+  line-height: 10px;
+  position: relative; }
   .eqftp__panel__toolbar__icon:hover {
     background-color: #f0f0f0; }
+.eqftp__dropdown {
+  display: none;
+  position: absolute;
+  right: 0; }
+  .eqftp__dropdown ul {
+    margin: 0;
+    padding: 0;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    background-color: #e3e3e3;
+    color: #000000; }
+    .eqftp__dropdown ul li {
+      list-style: none;
+      white-space: nowrap;
+      padding: 2px 10px;
+      cursor: pointer; }
+      .eqftp__dropdown ul li > .fa {
+        display: inline-block;
+        margin-right: 5px; }
+      .eqftp__dropdown ul li:hover {
+        background-color: #1080e0;
+        color: #ffffff; }
 
 #eqftp__panel {
   position: absolute;
@@ -197,6 +224,8 @@
     height: 30px;
     width: 100%;
     line-height: 30px;
+    position: relative;
+    z-index: 2;
     background-color: #f8f8f8;
     color: #000000; }
   #eqftp__panel__server-list {
@@ -204,6 +233,19 @@
     display: inline-block;
     margin: -2px 0 0 0;
     background-color: #171717; }
+  #eqftp__panel__settings_window {
+    transition: bottom 0.5s;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding-top: 30px;
+    box-sizing: border-box;
+    bottom: -100%;
+    left: 0;
+    z-index: 1;
+    background-color: #e3e3e3; }
+    #eqftp__panel__settings_window.active {
+      bottom: 0; }
 
 .dark #eqftp__panel {
   background-color: #1a1a1a; }
@@ -214,7 +256,12 @@
       background-color: #1a1c1d; }
   .dark #eqftp__panel__server-list {
     background-color: #171717; }
+  .dark #eqftp__panel__settings_window {
+    background-color: #1a1a1a; }
 .dark .eqftp__panel__toolbar__icon:hover {
   background-color: #1a1c1d; }
+.dark .eqftp__dropdown ul {
+  background-color: #1d1f21;
+  color: #ffffff; }
 
 /*# sourceMappingURL=ext.css.map */
