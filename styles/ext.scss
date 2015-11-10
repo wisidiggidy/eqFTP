@@ -10,6 +10,19 @@
         }
     }
     &__panel {
+        &__handler {
+            float: left;
+            height: 100%;
+            width: 5px;
+            position: relative;
+            z-index: 4;
+            cursor: e-resize;
+            transition: background-color 0.2s;
+            background-color: #d6d6d6;
+            &:hover {
+                background-color: #cbcbcb;
+            }
+        }
         &__toolbar {
             &__icon {
                 display: inline-block;
@@ -21,6 +34,31 @@
                 position: relative;
                 &:hover {
                     background-color: #f0f0f0;
+                }
+            }
+        }
+        &__settings_window {
+            &__title {
+                padding: 6px 10px;
+                font-weight: bold;
+                cursor: pointer;
+                border-bottom: 1px solid #c3c3c3;
+                transition: background-color 0.2s;
+                &:hover {
+                    color: #000000;
+                }
+                &.active {
+                    background-color: rgba(0,0,0,0.01);
+                }
+            }
+            &__close_holder {
+                text-align: center;
+                padding: 5px;
+                cursor: pointer;
+                background-color: rgba(0,0,0,0.05);
+                &:hover {
+                    background-color: rgba(0,0,0,0.1);
+                    color: #000000;
                 }
             }
         }
@@ -53,6 +91,41 @@
             }
         }
     }
+    &__tab {
+        display: none;
+    }
+    &__checkbox__switcher {
+        position: relative; width: 40px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+        & input[type=checkbox] {
+            display: none;
+            &:checked + label {
+                background-color: #1080e0;
+            }
+            &:checked + label, &:checked + label:before {
+               border-color: #1080e0;
+            }
+            &:checked + label:before {
+                right: 0px; 
+            }
+        }
+        & label {
+            display: block; overflow: hidden; cursor: pointer;
+            height: 15px; padding: 0; line-height: 15px;
+            border: 2px solid #999999; border-radius: 15px;
+            background-color: #EEEEEE;
+            transition: background-color 0.1s ease-in;
+            &:before {
+                content: "";
+                display: block; width: 15px; margin: 0px;
+                background: #FFFFFF;
+                position: absolute; top: 0; bottom: 0;
+                right: 23px;
+                border: 2px solid #999999; border-radius: 15px;
+                transition: all 0.1s ease-in 0s; 
+            }
+        }
+    }
 }
 #eqftp {
     &__panel {
@@ -66,15 +139,15 @@
             width: 100%;
             line-height: 30px;
             position: relative;
-            z-index: 2;
+            z-index: 3;
             background-color: #f8f8f8;
             color: #000000;
         }
-        &__server-list {
+        &__server_list {
             vertical-align: middle;
             display: inline-block;
             margin: -2px 0 0 0;
-            background-color: #171717;
+            background-color: #e3e3e3;
         }
         &__settings_window {
             transition: bottom 0.5s;
@@ -85,10 +158,27 @@
             box-sizing: border-box;
             bottom: -100%;
             left: 0;
-            z-index: 1;
+            z-index: 2;
             background-color: #e3e3e3;
             &.active {
                 bottom: 0;
+            }
+            & ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                max-height: 100%;
+                overflow-y: auto;
+            }
+            &__title {
+                padding: 5px 20px;
+            }
+            & input {
+                &[type=text], &[type=password] {
+                    width: 100%;
+                    box-sizing: border-box;
+                    height: 30px;
+                }
             }
         }
     }
@@ -107,11 +197,17 @@
                     }
                 }
             }
-            &__server-list {
+            &__server_list {
                 background-color: #171717;
             }
             &__settings_window {
                 background-color: #1a1a1a;
+                & .eqftp__tab {
+                    padding: 0 10px;
+                    & [class*=row] {
+                        padding: 5px 0;
+                    }
+                }
             }
         }
     }
@@ -121,10 +217,34 @@
             }
         }
         &__panel {
+            &__handler {
+                background-color: #131313;
+                &:hover {
+                    background-color: #101010;
+                }
+            }
             &__toolbar {
                 &__icon {
                     &:hover {
                         background-color: #1a1c1d;
+                    }
+                }
+            }
+            &__settings_window {
+                &__title {
+                    border-bottom: 1px solid #363636;
+                    &:hover {
+                        color: #ffffff;
+                    }
+                    &.active {
+                        background-color: rgba(255,255,255,0.02);
+                    }
+                }
+                &__close_holder {
+                    background-color: rgba(0,0,0,0.2);
+                    &:hover {
+                        background-color: rgba(0,0,0,0.3);
+                        color: #ffffff;
                     }
                 }
             }

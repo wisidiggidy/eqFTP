@@ -175,11 +175,25 @@
 .fa-cog:before {
   content: ""; }
 
+.fa-times:before {
+  content: ""; }
+
 .eqftp__toolbar__icon {
   background-image: url(img/toolbar__icon.svg);
   background-size: contain; }
   .eqftp__toolbar__icon.disabled {
     opacity: 0.2; }
+.eqftp__panel__handler {
+  float: left;
+  height: 100%;
+  width: 5px;
+  position: relative;
+  z-index: 4;
+  cursor: e-resize;
+  transition: background-color 0.2s;
+  background-color: #d6d6d6; }
+  .eqftp__panel__handler:hover {
+    background-color: #cbcbcb; }
 .eqftp__panel__toolbar__icon {
   display: inline-block;
   padding: 6px 7px;
@@ -190,6 +204,24 @@
   position: relative; }
   .eqftp__panel__toolbar__icon:hover {
     background-color: #f0f0f0; }
+.eqftp__panel__settings_window__title {
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px solid #c3c3c3;
+  transition: background-color 0.2s; }
+  .eqftp__panel__settings_window__title:hover {
+    color: #000000; }
+  .eqftp__panel__settings_window__title.active {
+    background-color: rgba(0, 0, 0, 0.01); }
+.eqftp__panel__settings_window__close_holder {
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05); }
+  .eqftp__panel__settings_window__close_holder:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000000; }
 .eqftp__dropdown {
   display: none;
   position: absolute;
@@ -213,6 +245,46 @@
       .eqftp__dropdown ul li:hover {
         background-color: #1080e0;
         color: #ffffff; }
+.eqftp__tab {
+  display: none; }
+.eqftp__checkbox__switcher {
+  position: relative;
+  width: 40px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none; }
+  .eqftp__checkbox__switcher input[type=checkbox] {
+    display: none; }
+    .eqftp__checkbox__switcher input[type=checkbox]:checked + label {
+      background-color: #1080e0; }
+    .eqftp__checkbox__switcher input[type=checkbox]:checked + label, .eqftp__checkbox__switcher input[type=checkbox]:checked + label:before {
+      border-color: #1080e0; }
+    .eqftp__checkbox__switcher input[type=checkbox]:checked + label:before {
+      right: 0px; }
+  .eqftp__checkbox__switcher label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    height: 15px;
+    padding: 0;
+    line-height: 15px;
+    border: 2px solid #999999;
+    border-radius: 15px;
+    background-color: #EEEEEE;
+    transition: background-color 0.1s ease-in; }
+    .eqftp__checkbox__switcher label:before {
+      content: "";
+      display: block;
+      width: 15px;
+      margin: 0px;
+      background: #FFFFFF;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 23px;
+      border: 2px solid #999999;
+      border-radius: 15px;
+      transition: all 0.1s ease-in 0s; }
 
 #eqftp__panel {
   position: absolute;
@@ -225,14 +297,14 @@
     width: 100%;
     line-height: 30px;
     position: relative;
-    z-index: 2;
+    z-index: 3;
     background-color: #f8f8f8;
     color: #000000; }
-  #eqftp__panel__server-list {
+  #eqftp__panel__server_list {
     vertical-align: middle;
     display: inline-block;
     margin: -2px 0 0 0;
-    background-color: #171717; }
+    background-color: #e3e3e3; }
   #eqftp__panel__settings_window {
     transition: bottom 0.5s;
     position: absolute;
@@ -242,10 +314,22 @@
     box-sizing: border-box;
     bottom: -100%;
     left: 0;
-    z-index: 1;
+    z-index: 2;
     background-color: #e3e3e3; }
     #eqftp__panel__settings_window.active {
       bottom: 0; }
+    #eqftp__panel__settings_window ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      max-height: 100%;
+      overflow-y: auto; }
+    #eqftp__panel__settings_window__title {
+      padding: 5px 20px; }
+    #eqftp__panel__settings_window input[type=text], #eqftp__panel__settings_window input[type=password] {
+      width: 100%;
+      box-sizing: border-box;
+      height: 30px; }
 
 .dark #eqftp__panel {
   background-color: #1a1a1a; }
@@ -254,12 +338,31 @@
     color: #ffffff; }
     .dark #eqftp__panel__toolbar__icon:hover {
       background-color: #1a1c1d; }
-  .dark #eqftp__panel__server-list {
+  .dark #eqftp__panel__server_list {
     background-color: #171717; }
   .dark #eqftp__panel__settings_window {
     background-color: #1a1a1a; }
+    .dark #eqftp__panel__settings_window .eqftp__tab {
+      padding: 0 10px; }
+      .dark #eqftp__panel__settings_window .eqftp__tab [class*=row] {
+        padding: 5px 0; }
+.dark .eqftp__panel__handler {
+  background-color: #131313; }
+  .dark .eqftp__panel__handler:hover {
+    background-color: #101010; }
 .dark .eqftp__panel__toolbar__icon:hover {
   background-color: #1a1c1d; }
+.dark .eqftp__panel__settings_window__title {
+  border-bottom: 1px solid #363636; }
+  .dark .eqftp__panel__settings_window__title:hover {
+    color: #ffffff; }
+  .dark .eqftp__panel__settings_window__title.active {
+    background-color: rgba(255, 255, 255, 0.02); }
+.dark .eqftp__panel__settings_window__close_holder {
+  background-color: rgba(0, 0, 0, 0.2); }
+  .dark .eqftp__panel__settings_window__close_holder:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #ffffff; }
 .dark .eqftp__dropdown ul {
   background-color: #1d1f21;
   color: #ffffff; }
