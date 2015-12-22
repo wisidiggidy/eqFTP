@@ -1,85 +1,10 @@
-<div id="eqftp__panel" style="display:none;">
-    <div class="eqftp__panel__handler" eqftp-resize-target="#eqftp__panel" eqftp-mousedown="resize" eqftp-resize="w"></div>
-    <div id="eqftp__panel__toolbar">
-        <div class="pull-left">
-            <select id="eqftp__panel__server_list">
-                <option value="-">{{eqftp__panel__server_list__disconnected}}</option>
-            </select>
-        </div>
-        <div class="pull-right">
-            <div class="eqftp__panel__toolbar__icon eqftp__dropdown_holder" eqftp-click="ui__panel__toolbar__dropdown--id=#eqftp__panel__toolbar_dropdown_1">
-                <i class="fa fa-bars"></i>
-                <div id="eqftp__panel__toolbar_dropdown_1" class="eqftp__dropdown">
-                    <ul>
-                        <li eqftp-click="ui__panel__settings_window__toggle"><i class="fa fa-cog"></i>{{eqftp__panel__dropdown_1__settings}}</li>
-                    </ul>
-                </div>
-            </div>
+<div class="eqftp-panel">
+    <div class="eqftp-panel__header">
+        <div class="eqftp-panel__header__inputHolder eqftp__hide_on_click_anywhere_else__protector">
+            <div class="eqftp-panel__header__inputHolder__iconClear"><i class="fa fa-times"></i></div>
+            <div class="eqftp-panel__header__inputHolder__iconDropdown" eqftp-click="ui__panel__toolbar__search__dropdown__toggle"><i class="fa fa-angle-down"></i></div>
+            <input type="text" class="eqftp-panel__header__input" eqftp-keyup="ui__panel__toolbar__search__mode__filter" eqftp-click="ui__panel__toolbar__search__dropdown__show" placeholder="{{eqftp__panel__search_input__placeholder}}">
         </div>
     </div>
-    <div id="eqftp__panel__content"></div>
-    <div id="eqftp__panel__settings_window">
-        <ul class="eqftp__tabs_holder">
-            <li class="eqftp__panel__settings_window__unsortable">
-                <div class="eqftp__panel__settings_window__close_holder" eqftp-click="ui__panel__settings_window__toggle">
-                    {{eqftp__panel__settings_window__close}} <i class="fa fa-times"></i>
-                </div>
-            </li>
-            <li class="eqftp__panel__settings_window__unsortable">
-                <div class="eqftp__panel__settings_window__title eqftp__tab_controller" eqftp-click="ui__tab__toggle--target=#eqftp__panel__settings_windows__settings_tab">{{eqftp__panel__settings_window__general_settings}}</div>
-                <div id="eqftp__panel__settings_windows__settings_tab" class="eqftp__tab">
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <label for="eqftp__settings__main__local_projects_root">{{eqftp__settings__main__local_projects_root}}</label>
-                        </div>
-                        <div class="span8">
-                            <input id="eqftp__settings__main__local_projects_root" type="text">
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <label for="eqftp__settings__main__settings_folder">{{eqftp__settings__main__settings_folder}}</label>
-                        </div>
-                        <div class="span8">
-                            <input id="eqftp__settings__main__settings_folder" type="text">
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <label for="eqftp__settings__main__use_master_password">{{eqftp__settings__main__use_master_password}}</label>
-                        </div>
-                        <div class="span8">
-                            <div class="eqftp__checkbox__switcher">
-                                <input id="eqftp__settings__main__use_master_password" type="checkbox">
-                                <label for="eqftp__settings__main__use_master_password"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <label for="eqftp__settings__main__use_notifications">{{eqftp__settings__main__use_notifications}}</label>
-                        </div>
-                        <div class="span8">
-                            <div class="eqftp__checkbox__switcher">
-                                <input id="eqftp__settings__main__use_notifications" type="checkbox">
-                                <label for="eqftp__settings__main__use_notifications"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <label for="eqftp__settings__main__use_debug">{{eqftp__settings__main__use_debug}}</label>
-                        </div>
-                        <div class="span8">
-                            <div class="eqftp__checkbox__switcher">
-                                <input id="eqftp__settings__main__use_debug" type="checkbox">
-                                <label for="eqftp__settings__main__use_debug"></label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </li>
-        </ul>
-    </div>
+    <div class="eqftp-panel__body"></div>
 </div>

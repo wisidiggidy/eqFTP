@@ -32,40 +32,66 @@ define(function (require, exports, module) {
         strings = require("strings"),
         toolbar = Mustache.render(require("text!htmlContent/toolbar.html"), strings),
         panel = Mustache.render(require("text!htmlContent/panel.html"), strings),
+        panel__searchDropdown__outer = Mustache.render(require("text!htmlContent/panel__searchDropdown--outer.html"), strings),
+        panel__searchDropdown__row = Mustache.render(require("text!htmlContent/panel__searchDropdown--row.html"), strings),
         
         eqftp = {
             ui: {
                 toolbar: {
                     toggle: function () {
-                        var panel_element = $("#eqftp__panel");
-                        if (panel_element.length !== 1) {
-                            $(".main-view .content").after(panel);
-                            panel_element = $("#eqftp__panel");
+                        eqftp.variables.ui.eqftp_panel = $(".eqftp-panel");
+                        if (eqftp.variables.ui.eqftp_panel.length !== 1) {
+                            eqftp.variables.ui.content.after(panel);
+                            eqftp.variables.ui.eqftp_panel = $(".eqftp-panel");
                         }
-                        if (panel_element.is(":visible")) {
-                            panel_element.hide();
-                            $(".main-view .content").css("right", eqftp.variables.defaults.main_view__content__right);
+                        if (eqftp.variables.ui.eqftp_panel.is(":visible")) {
+                            eqftp.variables.ui.eqftp_panel.hide();
+                            eqftp.variables.ui.content.css("right", eqftp.variables.defaults.main_view__content__right);
                         } else {
-                            var main_toolbar__right = parseInt($("#main-toolbar").css("right").replace("px", ""), 10),
-                                main_toolbar__width = $("#main-toolbar").outerWidth(),
-                                panel__width = eqftp.variables.defaults.panel__width,
-                                main_view__content__offset = panel__width;
-                            if (main_toolbar__right === 0) {
-                                panel_element.css("right", main_toolbar__width);
-                                eqftp.variables.defaults.main_view__content__right = main_toolbar__width;
-                                main_view__content__offset += main_toolbar__width;
-                            } else {
-                                panel_element.css("right", 0);
-                            }
-                            $(".main-view .content").css("right", main_view__content__offset);
-                            panel_element.width(panel__width).show();
+                            var panel__right_offset = $(window).innerWidth() - (eqftp.variables.ui.content.offset().left + eqftp.variables.ui.content.width());
+                            eqftp.variables.ui.eqftp_panel.css("right", panel__right_offset);
+                            eqftp.variables.ui.content.css("right", (eqftp.variables.defaults.panel__width + panel__right_offset));
+                            eqftp.variables.ui.eqftp_panel.width(eqftp.variables.defaults.panel__width).show();
                         }
                     }
                 },
                 panel: {
                     toolbar: {
-                        dropdown: function (params, e) {
-                            $(params.id).toggle();
+                        search: {
+                            dropdown: {
+                                render: function (rerender) {
+                                    if ($(eqftp.variables.ui.eqftp_panel__server_list).length === 0 || (rerender && rerender === 'rerender')) {
+                                        var out = "";
+                                        out += eqftp.utils.render(panel__searchDropdown__row, {title: 'T', host: 'H', user: 'U'});
+                                        out += eqftp.utils.render(panel__searchDropdown__row, {title: 'T2', host: 'H2', user: 'U2'});
+                                        out = eqftp.utils.render(panel__searchDropdown__outer, {content: out});
+                                        if ($(eqftp.variables.ui.eqftp_panel__server_list).length === 1) {
+                                            $(eqftp.variables.ui.eqftp_panel__server_list).remove();
+                                        }
+                                        $('.eqftp-panel__header__inputHolder').append(out);
+                                    }
+                                },
+                                toggle: function () {
+                                    eqftp.ui.panel.toolbar.search.dropdown.render();
+                                    $(eqftp.variables.ui.eqftp_panel__server_list).slideToggle(80);
+                                },
+                                show: function () {
+                                    eqftp.ui.panel.toolbar.search.dropdown.render();
+                                    $(eqftp.variables.ui.eqftp_panel__server_list).slideDown(80);
+                                }
+                            },
+                            mode: {
+                                filter: function () {
+                                    var v = $('.eqftp-panel__header__input').val();
+                                    if (v) {
+                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeIn(100);
+                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeOut(100);
+                                    } else {
+                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeOut(100);
+                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeIn(100);
+                                    }
+                                }
+                            }
                         }
                     },
                     settings_window: {
@@ -96,6 +122,31 @@ define(function (require, exports, module) {
                 }
             },
             utils: {
+                // accepts string `path__to__method--parameter=value;second=foobar` excluding eqftp in start
+                action: function (action, event) {
+                    var actions = action.split('--'),
+                        methods = actions[0].split('__'),
+                        tmp = eqftp,
+                        args = {};
+                    if (!!actions[1]) {
+                        var arguments_pairs = actions[1].split(';');
+                        arguments_pairs.forEach(function (pair, n) {
+                            pair = pair.split('=');
+                            args[pair[0]] = pair[1];
+                        });
+                    }
+                    methods.some(function (o, n) {
+                        if (eqftp.utils.check.isObject(tmp[o])) {
+                            tmp = tmp[o];
+                        } else if (eqftp.utils.check.isFunction(tmp[o])) {
+                            tmp[o](args, event);
+                            return true;
+                        } else {
+                            return true;
+                        }
+                    });
+                },
+                // all sorts of checks
                 check: {
                     isFunction: function (input) {
                         var getType = {};
@@ -108,6 +159,10 @@ define(function (require, exports, module) {
                     isObject: function (input) {
                         if (input !== null && typeof input === 'object') { return true; }
                         return false;
+                    },
+                    isString: function (input) {
+                        var getType = {};
+                        return input && getType.toString.call(input) === '[object String]';
                     }
                 },
                 resize: {
@@ -211,12 +266,39 @@ define(function (require, exports, module) {
                             }
                         }
                     }
+                },
+                // replaces placeholders with given paremeters
+                render: function (tpl, params, prefix) {
+                    if (eqftp.utils.check.isString(tpl) && eqftp.utils.check.isObject(params)) {
+                        var key;
+                        if (!prefix) {
+                            prefix = '';
+                        }
+                        for (key in params) {
+                            if (params.hasOwnProperty(key)) {
+                                var o = params[key];
+                                if (eqftp.utils.check.isObject(o)) {
+                                    tpl = eqftp.utils.render(tpl, o, prefix + key + '.');
+                                } else if (eqftp.utils.check.isString(o)) {
+                                    tpl = tpl.replace('[[' + prefix + key + ']]', o);
+                                } else {
+                                    return tpl;
+                                }
+                            }
+                        }
+                    }
+                    return tpl;
                 }
             },
             variables: {
                 defaults: {
                     main_view__content__right: 30,
                     panel__width: 300
+                },
+                ui: {
+                    content: $('.main-view .content'),
+                    eqftp_panel: $(".eqftp-panel"),
+                    eqftp_panel__server_list: '.eqftp-panel__server_dropdown_holder'
                 }
             }
         };
@@ -227,33 +309,27 @@ define(function (require, exports, module) {
         
         $('body').on('click', '[eqftp-click]', function (e) {
             e.preventDefault();
-            var click = $(this).attr('eqftp-click'),
-                actions = click.split('--'),
-                methods = actions[0].split('__'),
-                tmp = eqftp,
-                args = {};
-            if (!!actions[1]) {
-                var arguments_pairs = actions[1].split(';');
-                arguments_pairs.forEach(function (pair, n) {
-                    pair = pair.split('=');
-                    args[pair[0]] = pair[1];
-                });
-            }
-            methods.some(function (o, n) {
-                if (eqftp.utils.check.isObject(tmp[o])) {
-                    tmp = tmp[o];
-                } else if (eqftp.utils.check.isFunction(tmp[o])) {
-                    tmp[o](args, e);
-                    return true;
-                } else {
-                    return true;
-                }
-            });
+            eqftp.utils.action($(this).attr('eqftp-click'), e);
+        });
+        $('body').on('keyup', '[eqftp-keyup]', function (e) {
+            eqftp.utils.action($(this).attr('eqftp-keyup'), e);
         });
         $('body').on('click', function (e) {
-            var t = e.target;
-            if (!$(t).is('.eqftp__dropdown_holder') && $(t).closest('.eqftp__dropdown_holder').length === 0) {
-                $('.eqftp__dropdown').hide();
+            var t = e.target,
+                protector = $(t).closest('.eqftp__hide_on_click_anywhere_else__protector');
+            if (protector.length === 0) {
+                $('.eqftp__hide_on_click_anywhere_else').hide();
+            } else {
+                var protect = $('body');
+                if (protector.attr('eqftp-hocae_protect')) {
+                    protect = $(protector.attr('eqftp-hocae_protect'));
+                } else {
+                    var p = protector.find('.eqftp__hide_on_click_anywhere_else');
+                    if (p.length > 0) {
+                        protect = p;
+                    }
+                }
+                $('.eqftp__hide_on_click_anywhere_else').not(protect).hide();
             }
         });
         $('body').on('mousedown', '[eqftp-mousedown]', function () {
@@ -274,6 +350,6 @@ define(function (require, exports, module) {
     });
     
     AppInit.appReady(function () {
-        $("#main-toolbar .buttons .eqftp__toolbar__icon.disabled").removeClass('disabled');
+        $("#main-toolbar .buttons .eqftp-toolbar__icon.disabled").removeClass('disabled');
     });
 });
