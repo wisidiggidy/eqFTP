@@ -61,17 +61,17 @@
             width: 100%;
             top: 28px;
             box-sizing: border-box;
-            background-color: #1a1a1a;
-            box-shadow: 0 3px 10px #000000;
-            border: 1px solid #151515;
             border-radius: 0px 0px 3px 3px;
         }
         &__server_dropdown_item {
             padding: 5px 10px;
             width: 100%;
             box-sizing: border-box;
-            &:not(:last-child) {
-                border-bottom: 1px solid #2c2c2c;
+            opacity: 0.8;
+            transition: opacity 100ms;
+            cursor: pointer;
+            &:hover {
+                opacity: 1;
             }
             &__title {
                 font-size: 16px;
@@ -79,7 +79,6 @@
             &__host,
             &__user {
                 font-size: 10px;
-                display: inline-block;
                 margin-right: 10px;
             }
         }
@@ -92,6 +91,16 @@
             background-color: #47484b;
             &__header {
                 background-color: #58595c;
+            }
+            &__server_dropdown_holder {
+                background-color: #1a1a1a;
+                box-shadow: 0 3px 10px #000000;
+                border: 1px solid #151515;
+            }
+            &__server_dropdown_item {
+                &:not(:last-child) {
+                    border-bottom: 1px solid #2c2c2c;
+                }
             }
         }
     }

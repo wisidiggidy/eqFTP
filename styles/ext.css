@@ -231,26 +231,31 @@
     width: 100%;
     top: 28px;
     box-sizing: border-box;
-    background-color: #1a1a1a;
-    box-shadow: 0 3px 10px #000000;
-    border: 1px solid #151515;
     border-radius: 0px 0px 3px 3px; }
   .eqftp-panel__server_dropdown_item {
     padding: 5px 10px;
     width: 100%;
-    box-sizing: border-box; }
-    .eqftp-panel__server_dropdown_item:not(:last-child) {
-      border-bottom: 1px solid #2c2c2c; }
+    box-sizing: border-box;
+    opacity: 0.8;
+    transition: opacity 100ms;
+    cursor: pointer; }
+    .eqftp-panel__server_dropdown_item:hover {
+      opacity: 1; }
     .eqftp-panel__server_dropdown_item__title {
       font-size: 16px; }
     .eqftp-panel__server_dropdown_item__host, .eqftp-panel__server_dropdown_item__user {
       font-size: 10px;
-      display: inline-block;
       margin-right: 10px; }
 
 .dark .eqftp-panel {
   background-color: #47484b; }
   .dark .eqftp-panel__header {
     background-color: #58595c; }
+  .dark .eqftp-panel__server_dropdown_holder {
+    background-color: #1a1a1a;
+    box-shadow: 0 3px 10px #000000;
+    border: 1px solid #151515; }
+  .dark .eqftp-panel__server_dropdown_item:not(:last-child) {
+    border-bottom: 1px solid #2c2c2c; }
 
 /*# sourceMappingURL=ext.css.map */
