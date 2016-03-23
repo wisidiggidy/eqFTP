@@ -28,21 +28,34 @@ define(function (require, exports, module) {
     
     var AppInit = brackets.getModule("utils/AppInit"),
         ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
+        FileSystem = brackets.getModule("filesystem/FileSystem"),
+        PreferencesManager = brackets.getModule("preferences/PreferencesManager"),
         
         strings = require("strings"),
-        toolbar = Mustache.render(require("text!htmlContent/toolbar.html"), strings),
-        panel = Mustache.render(require("text!htmlContent/panel.html"), strings),
-        panel__searchDropdown__outer = Mustache.render(require("text!htmlContent/panel__searchDropdown--outer.html"), strings),
-        panel__searchDropdown__row = Mustache.render(require("text!htmlContent/panel__searchDropdown--row.html"), strings),
+        crypto_core = require("core-min"),
+        crypto_cypher = require("cipher-core-min"),
+        crypto_aes = require("aes-min"),
         
+        tpl__toolbar = Mustache.render(require("text!htmlContent/toolbar.html"), strings),
+        tpl__panel = Mustache.render(require("text!htmlContent/panel.html"), strings),
+        tpl__panel__searchDropdown__outer = Mustache.render(require("text!htmlContent/panel__searchDropdown--outer.html"), strings),
+        tpl__panel__searchDropdown__row = Mustache.render(require("text!htmlContent/panel__searchDropdown--row.html"), strings),
+        
+        _version = "0.8.0",
         eqftp = {
             ui: {
                 toolbar: {
                     toggle: function () {
                         eqftp.variables.ui.eqftp_panel = $(".eqftp-panel");
                         if (eqftp.variables.ui.eqftp_panel.length !== 1) {
-                            eqftp.variables.ui.content.after(panel);
+                            eqftp.variables.ui.content.after(tpl__panel);
                             eqftp.variables.ui.eqftp_panel = $(".eqftp-panel");
+                            
+                            if (eqftp.variables.eqFTP.misc.first_start) {
+                                var tpl__welcome_screen = Mustache.render(require("text!htmlContent/welcome_screen.html"), strings);
+                                eqftp.variables.ui.eqftp_panel = $(".eqftp-panel");
+                                eqftp.variables.ui.eqftp_panel.prepend(tpl__welcome_screen);
+                            }
                         }
                         if (eqftp.variables.ui.eqftp_panel.is(":visible")) {
                             eqftp.variables.ui.eqftp_panel.hide();
@@ -62,9 +75,9 @@ define(function (require, exports, module) {
                                 render: function (rerender) {
                                     if ($(eqftp.variables.ui.eqftp_panel__server_list).length === 0 || (rerender && rerender === 'rerender')) {
                                         var out = "";
-                                        out += eqftp.utils.render(panel__searchDropdown__row, {title: 'T', host: 'H', user: 'U'});
-                                        out += eqftp.utils.render(panel__searchDropdown__row, {title: 'T2', host: 'H2', user: 'U2'});
-                                        out = eqftp.utils.render(panel__searchDropdown__outer, {content: out});
+                                        out += eqftp.utils.render(tpl__panel__searchDropdown__row, {title: 'T', host: 'H', user: 'U'});
+                                        out += eqftp.utils.render(tpl__panel__searchDropdown__row, {title: 'T2', host: 'H2', user: 'U2'});
+                                        out = eqftp.utils.render(tpl__panel__searchDropdown__outer, {content: out});
                                         if ($(eqftp.variables.ui.eqftp_panel__server_list).length === 1) {
                                             $(eqftp.variables.ui.eqftp_panel__server_list).remove();
                                         }
@@ -73,6 +86,9 @@ define(function (require, exports, module) {
                                 },
                                 toggle: function () {
                                     eqftp.ui.panel.toolbar.search.dropdown.render();
+                                    if (!$(eqftp.variables.ui.eqftp_panel__server_list).is(":visible")) {
+                                        $('.eqftp-panel__header__input').focus();
+                                    }
                                     $(eqftp.variables.ui.eqftp_panel__server_list).slideToggle(80);
                                 },
                                 show: function () {
@@ -84,18 +100,40 @@ define(function (require, exports, module) {
                                 filter: function () {
                                     var v = $('.eqftp-panel__header__input').val();
                                     if (v) {
-                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeIn(100);
-                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeOut(100);
+                                        var r = new RegExp('.*?' + v + '.*?', 'i');
+                                        $.each($('.eqftp-panel__server_dropdown_item'), function () {
+                                            var fi = $(this).attr('data-fullinfo');
+                                            if (!r.test(fi)) {
+                                                $(this).hide();
+                                            } else {
+                                                $(this).show();
+                                            }
+                                        });
+                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeIn(200);
+                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeOut(200);
                                     } else {
-                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeOut(100);
-                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeIn(100);
+                                        $('.eqftp-panel__server_dropdown_item').show();
+                                        $('.eqftp-panel__header__inputHolder__iconClear').fadeOut(200);
+                                        $('.eqftp-panel__header__inputHolder__iconDropdown').fadeIn(200);
                                     }
+                                }
+                            }
+                        },
+                        infofooter: {
+                            toggle: function (params, e) {
+                                if ($(e.target).closest('.eqftp-infofooter--msgholder').length > 0) {
+                                    $('.eqftp-panel__infofooter').toggleClass('fullsized');
                                 }
                             }
                         }
                     },
                     settings_window: {
-                        toggle: function () {
+                        toggle: function (params, e) {
+                            if ($(e.target).closest('.eqftp-hamburger').length > 0) {
+                                $(e.target).closest('.eqftp-hamburger').toggleClass('active');
+                            }
+                            $('.eqftp-panel__header__inputHolder').toggleClass('eqftp-invisible');
+                            $('.eqftp-panel__header__settingsHeader').toggleClass('eqftp-invisible');
                             $('#eqftp__panel__settings_window').toggleClass('active');
                         }
                     }
@@ -163,6 +201,9 @@ define(function (require, exports, module) {
                     isString: function (input) {
                         var getType = {};
                         return input && getType.toString.call(input) === '[object String]';
+                    },
+                    isArray: function (input) {
+                        return input.isArray;
                     }
                 },
                 resize: {
@@ -280,7 +321,9 @@ define(function (require, exports, module) {
                                 if (eqftp.utils.check.isObject(o)) {
                                     tpl = eqftp.utils.render(tpl, o, prefix + key + '.');
                                 } else if (eqftp.utils.check.isString(o)) {
-                                    tpl = tpl.replace('[[' + prefix + key + ']]', o);
+                                    var str = eqftp.utils.escape('[[' + prefix + key + ']]'),
+                                        r = new RegExp(str, 'g');
+                                    tpl = tpl.replace(r, o);
                                 } else {
                                     return tpl;
                                 }
@@ -288,24 +331,83 @@ define(function (require, exports, module) {
                         }
                     }
                     return tpl;
+                },
+                escape: function (str) {
+                    return str.replace(/[\-\/\\\^\$\*\+\?\.\(\)|\[\]{}]/g, '\\$&');
+                },
+                open_file_dialog: function (title, start_path, callback) {
+                    if (!start_path || !eqftp.utils.check.isString(start_path)) {
+                        start_path = false;
+                    }
+                    if (!title || !eqftp.utils.check.isString(title)) {
+                        title = strings.eqftp__file_opening_dialog_title;
+                    }
+                    if (!callback || !eqftp.utils.check.isFunction(callback)) {
+                        callback = function () {};
+                    }
+                    FileSystem.showOpenDialog(false, false, title, start_path, null, callback);
+                },
+                save_file_dialog: function (title, start_path, callback) {
+                    if (!start_path || !eqftp.utils.check.isString(start_path)) {
+                        start_path = false;
+                    }
+                    if (!title || !eqftp.utils.check.isString(title)) {
+                        title = strings.eqftp__file_saving_dialog_title;
+                    }
+                    if (!callback || !eqftp.utils.check.isFunction(callback)) {
+                        callback = function () {};
+                    }
+                    FileSystem.showSaveDialog(title, start_path, 'settings.eqftp', callback);
                 }
             },
+            _settings: {
+                load: function (file_path) {
+                    
+                },
+                save: function (file_path) {
+                    
+                },
+                _init: function () {
+                }
+            },
+            _init: function () {
+                eqftp.variables.preferences.definePreference("eqFTP", "object", eqftp.variables.defaults.eqFTP);
+                eqftp.variables.eqFTP = eqftp.variables.preferences.get("eqFTP");
+                eqftp._settings._init();
+            },
             variables: {
+                eqFTP: false,
+                version: _version,
                 defaults: {
                     main_view__content__right: 30,
-                    panel__width: 300
+                    panel__width: 300,
+                    eqFTP: {
+                        main: {
+                            projects_folder: "",
+                            date_format: "%d %m %Y",
+                            debug: false,
+                            open_project_connection: false
+                        },
+                        misc: {
+                            version: _version,
+                            first_start: true
+                        },
+                        local_paths: [],
+                        connections: []
+                    }
                 },
                 ui: {
                     content: $('.main-view .content'),
                     eqftp_panel: $(".eqftp-panel"),
                     eqftp_panel__server_list: '.eqftp-panel__server_dropdown_holder'
-                }
+                },
+                preferences: PreferencesManager.getExtensionPrefs("eqFTP")
             }
         };
     
     AppInit.htmlReady(function () {
         ExtensionUtils.loadStyleSheet(module, "styles/ext.css");
-        $("#main-toolbar .buttons").append(toolbar);
+        $("#main-toolbar .buttons").append(tpl__toolbar);
         
         $('body').on('click', '[eqftp-click]', function (e) {
             e.preventDefault();
@@ -316,20 +418,20 @@ define(function (require, exports, module) {
         });
         $('body').on('click', function (e) {
             var t = e.target,
-                protector = $(t).closest('.eqftp__hide_on_click_anywhere_else__protector');
+                protector = $(t).closest('.eqftp-hide_on_click_anywhere_else__protector');
             if (protector.length === 0) {
-                $('.eqftp__hide_on_click_anywhere_else').hide();
+                $('.eqftp-hide_on_click_anywhere_else').hide();
             } else {
                 var protect = $('body');
                 if (protector.attr('eqftp-hocae_protect')) {
                     protect = $(protector.attr('eqftp-hocae_protect'));
                 } else {
-                    var p = protector.find('.eqftp__hide_on_click_anywhere_else');
+                    var p = protector.find('.eqftp-hide_on_click_anywhere_else');
                     if (p.length > 0) {
                         protect = p;
                     }
                 }
-                $('.eqftp__hide_on_click_anywhere_else').not(protect).hide();
+                $('.eqftp-hide_on_click_anywhere_else').not(protect).hide();
             }
         });
         $('body').on('mousedown', '[eqftp-mousedown]', function () {
@@ -351,5 +453,6 @@ define(function (require, exports, module) {
     
     AppInit.appReady(function () {
         $("#main-toolbar .buttons .eqftp-toolbar__icon.disabled").removeClass('disabled');
+        eqftp._init();
     });
 });
