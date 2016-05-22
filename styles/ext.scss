@@ -15,6 +15,8 @@
         height: 100%;
         &__header {
             padding: 38px 15px 10px 15px;
+            position: relative;
+            z-index: 2;
             &__settingsHeader {
                 opacity: 1;
                 transition: opacity 0.2s;
@@ -95,8 +97,7 @@
             //transform: scaleY(-1);
             &:hover {
                 height: 80px;
-                overflow-y: auto;
-                padding-right: 5px;
+                //overflow-y: auto;
                 & > .eqftp-infofooter--msgholder > .eqftp-infofooter--msg {
                     & > .eqftp-infofooter--time {
                         width: 35px;
@@ -109,6 +110,8 @@
             & > .eqftp-scrollbar {
                 opacity: 0;
                 transition: opacity 0.2s;
+                & > div {
+                }
             }
             & > .eqftp-infofooter--msgholder {
                 position: absolute;
@@ -161,6 +164,48 @@
                 font-size: 10px;
                 margin-right: 10px;
             }
+        }
+        &__body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            top: 0;
+            right: 0;
+            margin-top: 48px;
+            z-index: 1;
+        }
+        &__settings_window {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            padding: 20px 10px 35px;
+            margin-bottom: 27px;
+            overflow: auto;
+            &__settings_file_input {
+                width: calc(100% - 100px);
+            }
+            &__save_button {
+                margin: 0px 10px;
+                display: inline-block;
+                vertical-align: middle;
+                &_holder {
+                    position: absolute;
+                    bottom: 0px;
+                    left: 0;
+                    right: 0;
+                    height: 35px;
+                    box-shadow: 0px 3px 15px #000;
+                    line-height: 35px;
+                    border: none;
+                    box-sizing: border-box;
+                }
+            }
+        }
+        & input[type=text], input[type=password] {
+            box-sizing: border-box;
+            height: 30px;
         }
     }
     
@@ -276,11 +321,50 @@
         top: 0;
         bottom: 0;
         z-index: 10;
+        transition: width 0.2s;
+        &:hover {
+            width: 10px;
+        }
         & > div {
+            transition: height 0.2s;
             position: absolute;
             left: 0;
             right: 0;
             border-radius: 1px;
+        }
+    }
+    &-password {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        &__input {
+            &_holder {
+                top: 50%;
+                margin-top: -50%;
+                position: absolute;
+                left: 20px;
+                right: 20px;
+                height: 50px;
+            }
+            width: 100%;
+        }
+    }
+    &-fading {
+        transition: visibility 0s, opacity 0.2s linear;
+        visibility: hidden;
+        opacity: 0;
+        &.active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+    &-checkbox {
+        margin: 10px 0;
+        & input[type=checkbox] {
+            margin-top: 2px;
         }
     }
 }
@@ -315,6 +399,12 @@
                 }
                 &:hover {
                     background-color: #2c2c2c;
+                }
+            }
+            &__settings_window {
+                background-color: #47484b;
+                &__save_button_holder {
+                    background-color: #47484b;
                 }
             }
         }
@@ -356,7 +446,13 @@
             background-color: #242222;
             & > div {
                 background-color: #313131;
+                &:hover {
+                    background-color: #393939;
+                }
             }
+        }
+        &-password {
+            background-color: #47484b;
         }
     }
 }
