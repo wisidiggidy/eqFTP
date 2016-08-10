@@ -854,3 +854,8 @@ span[data-eqFTPQueueRemove]:hover {
 .dark #eqFTP-project-settings .eqFTP-ghost {
     background-color: #444444;
 }
+
+.spinner {
+    font-size: 14px !important;	
+}
+}
