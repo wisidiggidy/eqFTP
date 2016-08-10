@@ -856,5 +856,29 @@ span[data-eqFTPQueueRemove]:hover {
 }
 
 .spinFixer {
-    font-size: 14px !important;	
+    display: inline-block;
+    -webkit-animation: spinFix 2s infinite linear;
+            animation: spinFix 2s infinite linear;
+}
+
+@-webkit-keyframes spinFix {
+  0% {
+    -webkit-transform: perspective(1px) rotate(0deg);
+            transform: perspective(1px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: perspective(1px) rotate(359deg);
+            transform: perspective(1px) rotate(359deg);
+  }
+}
+
+@keyframes spinFix {
+  0% {
+    -webkit-transform: perspective(1px) rotate(0deg);
+            transform: perspective(1px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: perspective(1px) rotate(359deg);
+            transform: perspective(1px) rotate(359deg);
+  }
 }
